@@ -579,19 +579,15 @@ def train(model, datasets, train_cfg, options, fre):
                 for func in module.neuron_truth_tables:
                     npn_list_1 = hash_module[id(func[3])]
                     npn_list_2 = hash_module[id(func[5])]
-                    feedback = 0.25
+                    feedback = 1
                     for npn_list in npn_list_1:
                         for npn in npn_list:
-                            if ave_count / local_hash[npn] < 1:
-                                continue
-                            feedback += (ave_count / local_hash[npn]) ** 6
+                            feedback *= ave_count / local_hash[npn]
                     feedback_list_1.append(feedback)
-                    feedback = 0.25
+                    feedback = 1
                     for npn_list in npn_list_2:
                         for npn in npn_list:
-                            if ave_count / local_hash[npn] < 1:
-                                continue
-                            feedback += (ave_count / local_hash[npn]) ** 6
+                            feedback *= ave_count / local_hash[npn]
                     feedback_list_2.append(feedback)
                 if id(module.fc1) in hash_hook:
                     hash_hook[id(module.fc1)].remove()
